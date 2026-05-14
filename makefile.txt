@@ -1,0 +1,27 @@
+CC = gcc
+CFLAGS = -std=c89 -Wpedantic -Wall -Wextra -g
+ARCH = -DARCH_TARGET=\"ARM_Cortex_M0\"
+
+
+# DEFAULT BUILD (both apps)
+all: m0_app part4_app
+
+# PART 1 APP
+m0_app: main.o m0_uart.o
+	$(CC) $(CFLAGS) $(ARCH) -o m0_app main.o m0_uart.o
+main.o: main.c m0_uart.h
+	$(CC) $(CFLAGS) $(ARCH) -c main.c
+m0_uart.o: m0_uart.c m0_uart.h
+	$(CC) $(CFLAGS) $(ARCH) -c m0_uart.c
+
+# PART 4 APP
+part4_app: part4_main.o part4_uart.o
+	$(CC) $(CFLAGS) $(ARCH) -o part4_app part4_main.o part4_uart.o
+part4_main.o: part4_main.c part4_uart.h
+	$(CC) $(CFLAGS) $(ARCH) -c part4_main.c
+part4_uart.o: part4_uart.c part4_uart.h
+	$(CC) $(CFLAGS) $(ARCH) -c part4_uart.c
+
+# Clean up build files and the generated log
+clean:
+	rm -f *.o m0_app part4_app uart0.log data.out status.reg
